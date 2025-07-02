@@ -141,6 +141,12 @@ function getColors() {
 <style lang="less">
 .main-colors{
   background-color:var(--n-color) !important;
+  
+  .n-card-header{
+    .n-base-close{
+      z-index: 9999;
+    }
+  }
 }
 
 .color-show{
