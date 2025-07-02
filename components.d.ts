@@ -147,6 +147,7 @@ declare module 'vue' {
     SidebarEffect: typeof import('./src/components/sidebar/SidebarEffect.vue')['default']
     SidebarGeometry: typeof import('./src/components/sidebar/SidebarGeometry.vue')['default']
     SidebarHistory: typeof import('./src/components/sidebar/SidebarHistory.vue')['default']
+    SidebarHtmlPanel: typeof import('./src/components/sidebar/SidebarHtmlPanel.vue')['default']
     SidebarMaterial: typeof import('./src/components/sidebar/SidebarMaterial.vue')['default']
     SidebarMaterialBooleanProperty: typeof import('./src/components/sidebar/material/SidebarMaterialBooleanProperty.vue')['default']
     SidebarMaterialColorProperty: typeof import('./src/components/sidebar/material/SidebarMaterialColorProperty.vue')['default']

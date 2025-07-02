@@ -156,6 +156,13 @@ export function isGroup(object3D){
 	return (object3D.isGroup || object3D.children.length > 0)
 }
 
+/**
+ * 判断是否是HtmlPanel 3D对象
+ */
+export function isHtmlPanelObject(object){
+	return object && (object.isHtmlPanel || object.isHtmlSprite) && object.element;
+}
+
 export function setUserData(object:IModel, key:string, value:any) {
 	// key按照.分割，设置到object的userData中
 	const keys = key.split('.');
