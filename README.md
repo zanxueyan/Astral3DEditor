@@ -2,6 +2,8 @@
 
 🌍 简体中文 | [English](README.en.md)  
 
+[![Powered by DartNode](https://dartnode.com/branding/DN-Open-Source-sm.png)](https://dartnode.com "Powered by DartNode - Free VPS for Open Source")
+
 [![Online Demo](https://img.shields.io/badge/Online_Demo-Astral_3D_Editor-8732D7?style=for-the-badge&logo=google-chrome&logoColor=white)](https://editor.astraljs.com)
 
 > 基于 Vue3 + Three.js 的现代 Web 3D 编辑器
