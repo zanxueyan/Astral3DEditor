@@ -1,8 +1,8 @@
-import {useAddSignal,useDispatchSignal} from "@/hooks/useSignal";
 import * as THREE from "three";
 import {RoomEnvironment} from "three/examples/jsm/environments/RoomEnvironment";
-import {ViewportEffect} from "@/core/Viewport.Effect";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
+import {useAddSignal,useDispatchSignal} from "@/hooks/useSignal";
+import {ViewportEffect} from "@/core/Viewport.Effect";
 
 export class ViewportSignals {
     private readonly viewport: any;
@@ -205,11 +205,16 @@ export class ViewportSignals {
                 }
                 break;
             case 'ModelViewer':
+                if(!this.viewport.pmremGenerator){
+                    // 创建一个PMREMGenerator，从立方体映射环境纹理生成预过滤的 Mipmap 辐射环境贴图
+                    this.viewport.pmremGenerator = new THREE.PMREMGenerator(this.viewport.renderer);
+                    this.viewport.pmremGenerator.compileEquirectangularShader();
+                }
+
                 this.viewport.scene.environment = this.viewport.pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
                 break;
         }
 
-        
         useDispatchSignal("sceneGraphChanged");
     }
 

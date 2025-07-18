@@ -1,10 +1,13 @@
-import { useAddSignal } from "@/hooks/useSignal";
-import { ViewportEffect } from "@/core/Viewport.Effect";
-import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 import * as THREE from "three";
+import {RoomEnvironment} from "three/examples/jsm/environments/RoomEnvironment";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+import {useAddSignal,useDispatchSignal} from "@/hooks/useSignal";
+import { ViewportEffect } from "@/core/Viewport.Effect";
 
 export class ViewportSignals {
     private viewport: any;
+
+    private useBackgroundAsEnvironment = false;
 
     constructor(viewport) {
         this.viewport = viewport;
@@ -16,6 +19,8 @@ export class ViewportSignals {
         useAddSignal("sceneGraphChanged", this.sceneGraphChanged.bind(this));
         useAddSignal("objectSelected", this.objectSelected.bind(this));
         useAddSignal("sceneResize", this.sceneResize.bind(this));
+        useAddSignal("sceneBackgroundChanged", this.sceneBackgroundChanged.bind(this));
+        useAddSignal("sceneEnvironmentChanged", this.sceneEnvironmentChanged.bind(this));
     }
 
     /**
@@ -69,12 +74,12 @@ export class ViewportSignals {
         if (box3.isEmpty()) {
             box3.set(new THREE.Vector3(object.position.x - 1, object.position.y - 1, object.position.z - 1), new THREE.Vector3(object.position.x + 1, object.position.y + 1, object.position.z + 1));
         }
-        this.viewport.modules.controls.fitToBox(box3, true,{
-            cover:false,
-            paddingTop:3,
-            paddingBottom:3,
-            paddingLeft:3,
-            paddingRight:3,
+        this.viewport.modules.controls.fitToBox(box3, true, {
+            cover: false,
+            paddingTop: 3,
+            paddingBottom: 3,
+            paddingLeft: 3,
+            paddingRight: 3,
         });
     }
 
@@ -98,12 +103,91 @@ export class ViewportSignals {
         if (this.viewport.css2DRenderer) {
             this.viewport.css2DRenderer.setSize(this.viewport.container.offsetWidth, this.viewport.container.offsetHeight);
         }
-        if (this.viewport.css3DRenderer){
+        if (this.viewport.css3DRenderer) {
             this.viewport.css3DRenderer.setSize(this.viewport.container.offsetWidth, this.viewport.container.offsetHeight);
         }
-        
+
         this.viewport.render();
     };
+
+    /**
+     * 场景背景变更
+     * @param backgroundType
+     * @param backgroundColor
+     * @param backgroundTexture
+     * @param backgroundEquirectangularTexture
+     * @param backgroundBlurriness
+     * @param backgroundIntensity
+     * @param backgroundRotation
+     */
+    sceneBackgroundChanged(backgroundType: string, backgroundColor: string, backgroundTexture, backgroundEquirectangularTexture, backgroundBlurriness: number, backgroundIntensity: number, backgroundRotation: number) {
+        this.viewport.scene.background = null;
+
+        switch (backgroundType) {
+            case 'Color':
+                this.viewport.scene.background = new THREE.Color(backgroundColor);
+                break;
+            case 'Texture':
+                if (backgroundTexture) {
+                    this.viewport.scene.background = backgroundTexture;
+                }
+                break;
+            case 'Equirectangular':
+                if (backgroundEquirectangularTexture) {
+                    backgroundEquirectangularTexture.mapping = THREE.EquirectangularReflectionMapping;
+
+                    this.viewport.scene.background = backgroundEquirectangularTexture;
+                    this.viewport.scene.backgroundBlurriness = backgroundBlurriness;
+                    this.viewport.scene.backgroundIntensity = backgroundIntensity;
+                    this.viewport.scene.backgroundRotation.y = backgroundRotation * THREE.MathUtils.DEG2RAD;
+
+                    if (this.useBackgroundAsEnvironment) {
+                        this.viewport.scene.environment = this.viewport.scene.background;
+                        this.viewport.scene.environmentRotation.y = backgroundRotation * THREE.MathUtils.DEG2RAD;
+                    }
+                }
+                break;
+        }
+
+        useDispatchSignal("sceneGraphChanged");
+    }
+
+    /**
+     * 场景环境贴图变更
+     * @param environmentType
+     * @param environmentEquirectangularTexture
+     */
+    sceneEnvironmentChanged(environmentType, environmentEquirectangularTexture) {
+        this.viewport.scene.environment = null;
+        this.useBackgroundAsEnvironment = false;
+
+        switch (environmentType) {
+            case 'Background':
+                this.useBackgroundAsEnvironment = true;
+
+                this.viewport.scene.environment = this.viewport.scene.background;
+                this.viewport.scene.environment.mapping = THREE.EquirectangularReflectionMapping;
+                this.viewport.scene.environmentRotation.y = this.viewport.scene.backgroundRotation.y;
+                break;
+            case 'Equirectangular':
+                if (environmentEquirectangularTexture) {
+                    this.viewport.scene.environment = environmentEquirectangularTexture;
+                    this.viewport.scene.environment.mapping = THREE.EquirectangularReflectionMapping;
+                }
+                break;
+            case 'ModelViewer':
+                if (!this.viewport.pmremGenerator) {
+                    // 创建一个PMREMGenerator，从立方体映射环境纹理生成预过滤的 Mipmap 辐射环境贴图
+                    this.viewport.pmremGenerator = new THREE.PMREMGenerator(this.viewport.renderer);
+                    this.viewport.pmremGenerator.compileEquirectangularShader();
+                }
+
+                this.viewport.scene.environment = this.viewport.pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+                break;
+        }
+
+        useDispatchSignal("sceneGraphChanged");
+    }
 
     dispose() { }
 }

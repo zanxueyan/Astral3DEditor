@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import {nextTick, onBeforeUnmount, onMounted, ref, unref} from "vue";
+import {nextTick, onBeforeUnmount, onMounted, ref, toRaw} from "vue";
 import {EquirectangularReflectionMapping} from "three";
 import {t} from "@/language";
 import {useAddSignal, useDispatchSignal,useRemoveSignal} from "@/hooks/useSignal";
@@ -179,27 +179,27 @@ function refreshUI() {
 function onBackgroundChanged() {
   useDispatchSignal(
       "sceneBackgroundChanged",
-      unref(backgroundType),
-      unref(backgroundColor),
-      unref(backgroundTexture),
-      unref(backgroundEquirectangularTexture),
-      unref(backgroundBlurriness),
-      unref(backgroundIntensity),
-      unref(backgroundRotation),
+      toRaw(backgroundType.value),
+      toRaw(backgroundColor.value),
+      toRaw(backgroundTexture.value),
+      toRaw(backgroundEquirectangularTexture.value),
+      toRaw(backgroundBlurriness.value),
+      toRaw(backgroundIntensity.value),
+      toRaw(backgroundRotation.value),
   );
 }
 
 //environment Change Event
 function onEnvironmentChanged() {
-  useDispatchSignal("sceneEnvironmentChanged", unref(environmentSelect), unref(environmentTexture));
+  useDispatchSignal("sceneEnvironmentChanged", toRaw(environmentSelect.value), toRaw(environmentTexture.value));
 }
 
 //fog Change Event
 function onFogChanged() {
-  useDispatchSignal("sceneFogChanged", unref(fogSelect), unref(fogColor), unref(fogNear), unref(fogFar), unref(fogDensity));
+  useDispatchSignal("sceneFogChanged", toRaw(fogSelect.value), toRaw(fogColor.value), toRaw(fogNear.value), toRaw(fogFar.value), toRaw(fogDensity.value));
 }
 
 function onFogSettingsChanged() {
-  useDispatchSignal("sceneFogSettingsChanged", unref(fogSelect), unref(fogColor), unref(fogNear), unref(fogFar), unref(fogDensity));
+  useDispatchSignal("sceneFogSettingsChanged", toRaw(fogSelect.value), toRaw(fogColor.value), toRaw(fogNear.value), toRaw(fogFar.value), toRaw(fogDensity.value));
 }
 </script>

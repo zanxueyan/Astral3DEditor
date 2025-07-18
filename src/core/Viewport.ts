@@ -50,7 +50,7 @@ export class Viewport {
     private sceneHelpers: THREE.Scene;
     renderer: THREE.WebGLRenderer | undefined; 
     css3DRenderer: CSS3DRenderer = new CSS3DRenderer();
-    private pmremGenerator: THREE.PMREMGenerator | undefined;
+    private pmremGenerator: THREE.PMREMGenerator | null = null;
 
     private showSceneHelpers: boolean = true;
     private grid: THREE.Group;
@@ -112,6 +112,7 @@ export class Viewport {
             this.renderer.setAnimationLoop(null);
             this.renderer.dispose();
             this.pmremGenerator?.dispose();
+            this.pmremGenerator = null;
 
             this.modules.controls.disconnect();
             this.container.removeChild(this.renderer.domElement);
@@ -139,9 +140,9 @@ export class Viewport {
         this.renderer.setPixelRatio(Math.max(Math.ceil(window.devicePixelRatio), 1));
         this.renderer.setSize(this.container.offsetWidth, this.container.offsetHeight);
 
-        // 创建一个PMREMGenerator，从立方体映射环境纹理生成预过滤的 Mipmap 辐射环境贴图
-        this.pmremGenerator = new THREE.PMREMGenerator(this.renderer);
-        this.pmremGenerator.compileEquirectangularShader();
+        if(this.scene.environment && this.scene.environment.isRenderTargetTexture){
+            useDispatchSignal("sceneEnvironmentChanged",'ModelViewer');
+        }
 
         // 在container中最前面插入渲染器的dom元素
         this.container.insertBefore(this.renderer.domElement, this.container.firstChild);
