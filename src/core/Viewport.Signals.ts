@@ -1,4 +1,4 @@
-import {useAddSignal} from "@/hooks/useSignal";
+import {useAddSignal,useDispatchSignal} from "@/hooks/useSignal";
 import * as THREE from "three";
 import {RoomEnvironment} from "three/examples/jsm/environments/RoomEnvironment";
 import {ViewportEffect} from "@/core/Viewport.Effect";
@@ -178,7 +178,7 @@ export class ViewportSignals {
                 break;
         }
 
-        this.render();
+        useDispatchSignal("sceneGraphChanged");
     }
 
     /**
@@ -209,7 +209,8 @@ export class ViewportSignals {
                 break;
         }
 
-        this.render();
+        
+        useDispatchSignal("sceneGraphChanged");
     }
 
     /**
@@ -232,7 +233,8 @@ export class ViewportSignals {
                 this.viewport.scene.fog = new THREE.FogExp2(fogColor, fogDensity);
                 break;
         }
-        this.viewport.render();
+        
+        useDispatchSignal("sceneGraphChanged");
     }
 
     /**

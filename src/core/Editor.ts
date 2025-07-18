@@ -121,6 +121,8 @@ class Editor {
 
 		setActive('sceneGraphChanged', true);
 		dispatch('sceneGraphChanged');
+
+		return this.scene;
 	}
 
 	//添加三维对象
@@ -507,6 +509,13 @@ class Editor {
 		if(json.scripts){ this.scripts = json.scripts;}
 
 		this.setScene(await loader.parseAsync(json.scene));
+
+		// 20250718: 环境类型是ModelViewer时需要手动设置，因为scene.toJSON()不会处理renderTargetTexture
+        switch(json.scene.object.environmentType){
+            case "ModelViewer":
+                dispatch("sceneEnvironmentChanged",'ModelViewer');
+                break
+        }
 
 		return {initCamera:camera}
 	}

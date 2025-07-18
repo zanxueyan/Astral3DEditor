@@ -1,4 +1,4 @@
-import { Color, DataTexture, LuminanceFormat, LinearFilter, Vector3, InstancedBufferGeometry, Sphere, Box3, InstancedBufferAttribute, PlaneGeometry as PlaneBufferGeometry, Vector2, Vector4, Matrix3, MeshBasicMaterial, DoubleSide, Matrix4, Mesh } from 'three';
+import { Color, DataTexture, RedFormat, LinearFilter, Vector3, InstancedBufferGeometry, Sphere, Box3, InstancedBufferAttribute, PlaneGeometry as PlaneBufferGeometry, Vector2, Vector4, Matrix3, MeshBasicMaterial, DoubleSide, Matrix4, Mesh } from 'three';
 import { defineWorkerModule, ThenableWorkerModule } from './troika-worker-utils.esm.js';
 import { createDerivedMaterial, voidMainRegExp } from './troika-three-utils.esm.js';
 
@@ -4422,7 +4422,7 @@ function getTextRenderInfo(args, callback) {
         new Uint8Array(sdfGlyphSize * textureWidth),
         textureWidth,
         sdfGlyphSize,
-        LuminanceFormat,
+        RedFormat,
         undefined,
         undefined,
         undefined,

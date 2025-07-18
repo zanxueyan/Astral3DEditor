@@ -144,6 +144,8 @@ export class Package {
             return name;
         }
 
+        console.log(imageJson)
+
         const name = `${imageJson.url.type}!${imageJson.url.width}!${imageJson.url.height}!${imageJson.uuid}.env`;
         const buffer = new TYPED_ARRAYS[imageJson.url.type](imageJson.url.data);
         zipData.push({ name, texture: buffer.buffer });
@@ -249,14 +251,21 @@ export class Package {
         newScene.children = [];
 
         const sceneJson = newScene.toJSON();
+        console.log(newScene,sceneJson.images)
         // scene uuid需要和原来一致，防止绑定在scene的脚本无法还原
         sceneJson.object.uuid = window.viewer.scene.uuid;
-
         sceneJson.object.children = [];
+
+        // 20250718: 环境类型是ModelViewer时需要特殊处理，因为scene.toJSON()不会处理renderTargetTexture
+        if(newScene.environment && newScene.environment.isRenderTargetTexture){
+            sceneJson.object.environmentType = "ModelViewer";
+        }
 
         const sceneZipData: SourceData[] = [];
         // 处理背景和环境贴图
         if (!sceneJson.images) sceneJson.images = [];
+
+        console.log(sceneJson.images)
         sceneJson.images = sceneJson.images.map((image) => this.handleImage(image, sceneZipData));
 
         // 保存场景中需打包的group数组

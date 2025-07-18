@@ -996,6 +996,11 @@
   resolved "https://registry.npmmirror.com/@ctrl/tinycolor/-/tinycolor-3.6.1.tgz#b6c75a56a1947cc916ea058772d666a2c8932f31"
   integrity sha512-SITSV6aIXsuVNV3f3O0f2n/cgyEDWoSqtZMYiAmcsYHydcKrOz3gUxB/iXd/Qf08+IZX4KpgNbvUdMBmWz+kcA==
 
+"@dimforge/rapier3d-compat@^0.12.0":
+  version "0.12.0"
+  resolved "https://registry.npmmirror.com/@dimforge/rapier3d-compat/-/rapier3d-compat-0.12.0.tgz#7b3365e1dfdc5cd957b45afe920b4ac06c7cd389"
+  integrity sha512-uekIGetywIgopfD97oDL5PfeezkFpNhwlzlaEYNOA0N6ghdsOvh/HYjSMek5Q2O1PYvRSDFcqFVJl4r4ZBwOow==
+
 "@dxfom/mtext@0.3.2":
   version "0.3.2"
   resolved "https://registry.npmmirror.com/@dxfom/mtext/-/mtext-0.3.2.tgz#c99e1cc45ceb7931286b1cd961a6bb826cedaddc"
@@ -1667,11 +1672,12 @@
   resolved "https://registry.npmmirror.com/@types/stats.js/-/stats.js-0.17.3.tgz#705446e12ce0fad618557dd88236f51148b7a935"
   integrity sha512-pXNfAD3KHOdif9EQXZ9deK82HVNaXP5ZIF5RP2QG6OQFNTaY2YIetfrE9t528vEreGQvEPRDDc8muaoYeK0SxQ==
 
-"@types/three@^0.170.0":
-  version "0.170.0"
-  resolved "https://registry.npmmirror.com/@types/three/-/three-0.170.0.tgz#1fe17693e4e08dd6fd8662542af4c9cba9671620"
-  integrity sha512-CUm2uckq+zkCY7ZbFpviRttY+6f9fvwm6YqSqPfA5K22s9w7R4VnA3rzJse8kHVvuzLcTx+CjNCs2NYe0QFAyg==
+"@types/three@0.176.0":
+  version "0.176.0"
+  resolved "https://registry.npmmirror.com/@types/three/-/three-0.176.0.tgz#b6eced2b05e839395a6171e066c4631bc5b0a1e0"
+  integrity sha512-FwfPXxCqOtP7EdYMagCFePNKoG1AGBDUEVKtluv2BTVRpSt7b+X27xNsirPCTCqY1pGYsPUzaM3jgWP7dXSxlw==
   dependencies:
+    "@dimforge/rapier3d-compat" "^0.12.0"
     "@tweenjs/tween.js" "~23.1.3"
     "@types/stats.js" "*"
     "@types/webxr" "*"
@@ -4962,10 +4968,10 @@ three-mesh-bvh@0.7.3:
   resolved "https://registry.npmmirror.com/three-mesh-bvh/-/three-mesh-bvh-0.7.3.tgz#91f2d7e26f230288b5b0a6bdf41bdd9620348945"
   integrity sha512-3W6KjzmupjfE89GuHPT31kxKWZ4YGZPEZJNysJpiOZfQRsBQQgmK7v/VJPpjG6syhAvTnY+5Fr77EvIkTLpGSw==
 
-three@0.170.0:
-  version "0.170.0"
-  resolved "https://registry.npmmirror.com/three/-/three-0.170.0.tgz#6087f97aab79e9e9312f9c89fcef6808642dfbb7"
-  integrity sha512-FQK+LEpYc0fBD+J8g6oSEyyNzjp+Q7Ks1C568WWaoMRLW+TkNNWmenWeGgJjV105Gd+p/2ql1ZcjYvNiPZBhuQ==
+three@0.176.0:
+  version "0.176.0"
+  resolved "https://registry.npmmirror.com/three/-/three-0.176.0.tgz#a30c1974e46db5745e4f96dd9ee2028d71e16ecf"
+  integrity sha512-PWRKYWQo23ojf9oZSlRGH8K09q7nRSWx6LY/HF/UUrMdYgN9i1e2OwJYHoQjwc6HF/4lvvYLC5YC1X8UJL2ZpA==
 
 tinyglobby@^0.2.10:
   version "0.2.12"
