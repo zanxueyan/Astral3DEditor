@@ -99,7 +99,7 @@ async function update() {
       texture.value = material[props.property];
 
       // 贴图是否存在纹理重复属性
-      if(material[props.property].repeat){
+      if(material[props.property]?.repeat){
         repeat.has = true;
         repeat.wrap = material[props.property].wrapS;
         repeat.x = material[props.property].repeat.x;
