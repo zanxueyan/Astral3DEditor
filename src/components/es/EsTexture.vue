@@ -5,6 +5,7 @@ import type {UploadFileInfo} from 'naive-ui'
 import {RGBELoader} from 'three/examples/jsm/loaders/RGBELoader.js';
 import {TGALoader} from 'three/examples/jsm/loaders/TGALoader.js';
 import { KTX2Loader } from 'three/examples/jsm/loaders/KTX2Loader.js';
+import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader.js';
 import { useDispatchSignal } from "@/hooks/useSignal";
 
 const props = defineProps({
@@ -176,6 +177,27 @@ function loadFile(file) {
       image.src = event.target?.result as string;
     }, false);
     reader.readAsDataURL(file);
+  }else if(extension === 'exr'){
+    reader.addEventListener( 'load', ( event ) => {
+      const arrayBuffer = event.target?.result as ArrayBuffer;
+      const blobURL = URL.createObjectURL(new Blob([arrayBuffer]));
+
+      const exrLoader = new EXRLoader();
+
+      exrLoader.load(blobURL, (texture) => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        // @ts-ignore
+        texture.sourceFile = file.name;
+
+        cache.set(hash, texture);
+
+        setValue(texture);
+        emits("change", texture);
+      });
+    });
+
+    reader.readAsArrayBuffer(file);
+
   }
 }
 
