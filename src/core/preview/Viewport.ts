@@ -62,6 +62,7 @@ let events = {
     onPointerdown: [],
     onPointerup: [],
     onPointermove: [],
+    onPick: []
 };
 
 const projectConfigStore = useProjectConfigStoreWithOut();
@@ -335,9 +336,10 @@ export class Viewport {
             onPointerdown: [],
             onPointerup: [],
             onPointermove: [],
+            onPick: []
         };
 
-        let scriptWrapParams = 'helper,renderer,scene,camera,controls,clock';
+        let scriptWrapParams = 'THREE,helper,renderer,scene,camera,controls,clock';
         const scriptWrapResultObj = {};
 
         for (const eventKey in events) {
@@ -359,7 +361,7 @@ export class Viewport {
 
             for (let i = 0; i < scripts.length; i++) {
                 const script = scripts[i];
-                const functions = (new Function(scriptWrapParams, script.source + '\nreturn ' + scriptWrapResult + ';').bind(object))(helper, this.renderer, this.scene, this.camera, this.modules.controls, this.clock);
+                const functions = (new Function(scriptWrapParams, script.source + '\nreturn ' + scriptWrapResult + ';').bind(object))(THREE, helper, this.renderer, this.scene, this.camera, this.modules.controls, this.clock);
 
                 for (const name in functions) {
                     if (functions[name] === undefined) continue;
@@ -379,6 +381,8 @@ export class Viewport {
         if (onDownPosition.distanceTo(onUpPosition) === 0) {
             const intersects = this.getIntersects(onUpPosition);
             useDispatchSignal("intersectionsDetected", intersects);
+
+            this.dispatch(events.onPick, {intersects,pickPosition: onUpPosition})
             this.render();
         }
     }
