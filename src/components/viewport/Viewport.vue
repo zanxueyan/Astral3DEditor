@@ -2,7 +2,7 @@
   <div class="w-full h-full">
     <Toolbar />
 
-    <div id="viewport" ref="viewportRef" class="absolute top-0 left-0 w-full h-full">
+    <div id="viewport" ref="viewportRef" class="absolute top-0 left-0 w-full h-full" @pointerdown="handleViewportPointerdown">
       <ViewportInfo />
     </div>
 
@@ -34,6 +34,15 @@ function onViewPortResize(width: number, height: number) {
     useDispatchSignal("sceneResize", width, height);
     timer = null;
   }, 10)
+}
+
+function handleViewportPointerdown(){
+  const focusedElement = document.activeElement;
+  // @ts-ignore
+  if(focusedElement && focusedElement.blur) {
+    // @ts-ignore
+    focusedElement.blur();
+  }
 }
 
 onMounted(async () => {
